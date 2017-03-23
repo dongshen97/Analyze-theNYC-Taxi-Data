@@ -36,6 +36,25 @@ def Sourec_PickupWhere(sourcepath):
     return up_time, up_longitude, up_latitude
 
 
+def Sourec_Search(sourcepath, *args):
+    search = []
+    returnList = []
+    for value in args:
+        search.append(value)
+    with open(sourcepath, 'r', newline='') as csvreader:
+        filereader = pd.read_csv(csvreader,
+                                 usecols=search)
+    for value in args:
+        if value is 'tpep_pickup_datetime':
+            up_time = []
+            for val in filereader['tpep_pickup_datetime']:
+                up_time.append(val.split()[1].split(":")[0])
+            returnList.append(np.array(up_time).astype(np.int))
+        else:
+            returnList.append(filereader[value].values.astype(np.float))
+    return returnList
+
+
 def FormatType(ListT, ListLo, ListLa, fromID, toID, loFr, loTo, laFr, laTo):
     returnListT = []
     returnListLo = []
@@ -43,15 +62,10 @@ def FormatType(ListT, ListLo, ListLa, fromID, toID, loFr, loTo, laFr, laTo):
     for value in range(fromID, toID):
         if ListLo[value] < loTo and ListLo[value] > loFr \
            and ListLa[value] < laTo and ListLa[value] > laFr:
-            returnListT.append(ListT[value].split()[1].split(":")[0])
-            returnListLo.append(ListLo[value])
-            returnListLa.append(ListLa[value])
+            returnListT.append(int(ListT[value].split()[1].split(":")[0]))
+            returnListLo.append(float(ListLo[value]))
+            returnListLa.append(float(ListLa[value]))
+    returnListT = np.array(returnListT).astype(np.int)
+    returnListLo = np.array(returnListLo).astype(np.float)
+    returnListLa = np.array(returnListLa).astype(np.float)
     return returnListT, returnListLo, returnListLa
-
-
-def ToNumpType(List, isInt=True):
-    if isInt:
-        List = np.array(List).astype(np.int)
-    else:
-        List = np.array(List).astype(np.float)
-    return List
