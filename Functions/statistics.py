@@ -23,6 +23,46 @@ def LongShort_path(Tlist, Dlist):
     return mode(BT), mode(ST)
 
 
+def LoLaDefindbyPathTime(Tlist, LoList, LaList, TIME, loFr, loTo, laFr, laTo):
+    reLo = []
+    reLa = []
+    for value in range(len(Tlist)):
+        if Tlist[value] == TIME:
+            if LoList[value] < loTo and LoList[value] > loFr \
+               and LaList[value] < laTo and LaList[value] > laFr:
+                reLo.append(LoList[value])
+                reLa.append(LaList[value])
+    return reLo, reLa
+
+
+def LoLabyLPathAndTime(Tlist, LoList, LaList, Dlist, TIME,
+                       loFr, loTo, laFr, laTo):
+    middle = np.median(Dlist)
+    reLo = []
+    reLa = []
+    for value in range(len(Tlist)):
+        if Tlist[value] == TIME and Dlist[value] > middle:
+            if LoList[value] < loTo and LoList[value] > loFr \
+               and LaList[value] < laTo and LaList[value] > laFr:
+                reLo.append(LoList[value])
+                reLa.append(LaList[value])
+    return reLo, reLa
+
+
+def LoLabySPathAndTime(Tlist, LoList, LaList, Dlist, TIME,
+                       loFr, loTo, laFr, laTo):
+    middle = np.median(Dlist)
+    reLo = []
+    reLa = []
+    for value in range(len(Tlist)):
+        if Tlist[value] == TIME and Dlist[value] < middle:
+            if LoList[value] < loTo and LoList[value] > loFr \
+               and LaList[value] < laTo and LaList[value] > laFr:
+                reLo.append(LoList[value])
+                reLa.append(LaList[value])
+    return reLo, reLa
+
+
 def Get_BiggestLowest(nparray):
     maxnum = math.floor(np.amax(nparray) * 10) / 10
     minnum = math.ceil(np.amin(nparray) * 10) / 10
